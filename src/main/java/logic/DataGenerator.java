@@ -17,6 +17,18 @@ public class DataGenerator {
 	public XY generateXYPoint(int m) {
 		int x = r.nextInt(m) + 1;
 		int y = r.nextInt(m) + 1;
+//		int x = m/2, y=m/2;
+//		while(x>m/4 && x<(m-m/4) && y>m/4 && y<(m-m/4)) {
+//			x = r.nextInt(m) + 1;
+//		y = r.nextInt(m) + 1;
+//		}
+//		if (r.nextBoolean()) {
+//			x = r.nextInt(m / 8) + m / 8;
+//			x += m / 2;
+//		} else {
+//			y = r.nextInt(m / 8) + m / 8;
+//			y += m / 2;
+//		} 
 		return new XY((double) x, (double) y);
 	}
 
