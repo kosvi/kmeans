@@ -71,4 +71,12 @@ public class Cluster implements Comparable<Cluster> {
 	public int compareTo(Cluster o) {
 		return this.name.compareTo(o.name);
 	}
+
+	@Override
+	public String toString() {
+		if (center == null) {
+			return null;
+		}
+		return "(" + center.getX() + ", " + center.getY() + ")";
+	}
 }

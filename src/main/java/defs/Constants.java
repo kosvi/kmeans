@@ -11,6 +11,6 @@ public class Constants {
 	public static final int MAX_M = 2 * MAX_N;
 	public static final double STEP = 0.5;
 	public static final int WINDOW_SIZE = 700;
-	public static final int NUMBER_OF_ITERATIONS = 10;
+	public static final int NUMBER_OF_ITERATIONS = 20;
 
 }

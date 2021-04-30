@@ -43,8 +43,16 @@ public class ClusterFactory {
 		// After that we start moving data to closest cluster and cluster centers to
 		// center of current cluster repeatedly
 		this.moveAllToNearestK();
+		String centers = "";
 		for (int i = 0; i < Constants.NUMBER_OF_ITERATIONS; i++) {
 			this.moveCenters();
+			String newCenters = this.clusters.toString();
+			System.out.println(newCenters);
+			// If centers are not moved, then we do not need to iterate any more
+			if (centers.equals(newCenters)) {
+				break;
+			}
+			centers = newCenters;
 			this.moveAllToNearestK();
 		}
 	}

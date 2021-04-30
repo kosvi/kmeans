@@ -29,4 +29,14 @@ public class Clusters {
 		}
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (Cluster c : clusters) {
+			sb.append(c.toString());
+			sb.append(" ");
+		}
+		return sb.toString();
+	}
 }
