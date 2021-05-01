@@ -44,6 +44,7 @@ public class ClusterFactory {
 		// center of current cluster repeatedly
 		this.moveAllToNearestK();
 		String centers = "";
+		System.out.println("Iterating cluster centers: ");
 		for (int i = 0; i < Constants.NUMBER_OF_ITERATIONS; i++) {
 			this.moveCenters();
 			String newCenters = this.clusters.toString();
@@ -55,6 +56,8 @@ public class ClusterFactory {
 			centers = newCenters;
 			this.moveAllToNearestK();
 		}
+		System.out.println("Cluster sizes: ");
+		System.out.println(this.clusters.getClusterSizes());
 	}
 
 	private void moveCenters() {

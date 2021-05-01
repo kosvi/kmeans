@@ -21,6 +21,16 @@ public class Clusters {
 		return clusters;
 	}
 
+	public String getClusterSizes() {
+		StringBuilder sb = new StringBuilder();
+		for (Cluster c : clusters) {
+			sb.append(c.getName() + ": ");
+			sb.append(c.getData().size());
+			sb.append(" ");
+		}
+		return sb.toString();
+	}
+
 	public Cluster getClusterByName(String name) {
 		for (Cluster c : clusters) {
 			if (c.getName().equalsIgnoreCase(name)) {
