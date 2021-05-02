@@ -12,6 +12,7 @@ import defs.Constants;
 import logic.ClusterFactory;
 import logic.DataGenerator;
 import logic.Distances;
+import logic.Splitter;
 import model.Cluster;
 import model.Clusters;
 import model.XY;
@@ -66,6 +67,10 @@ public class UI {
 				generateAndDrawClusters();
 				continue;
 			}
+			if (s == 6) {
+				splitData();
+				continue;
+			}
 		}
 	}
 
@@ -85,6 +90,23 @@ public class UI {
 			System.err.println(e.getMessage());
 		}
 		return s;
+	}
+
+	private boolean splitData() {
+		Splitter splitter = new Splitter(this.data);
+		Cluster c1 = new Cluster("data1", splitter.getCluster1(), splitter.getCenter1());
+		Cluster c2 = new Cluster("data2", splitter.getCluster2(), splitter.getCenter2());
+		this.clusters = new Clusters();
+		this.clusters.addCluster(c1);
+		this.clusters.addCluster(c2);
+		sc.reset();
+		for (Cluster c : this.clusters.getClusters()) {
+			sc.addData(c);
+		}
+		for (Cluster c : this.clusters.getClusters()) {
+			sc.addK(c);
+		}
+		return this.drawChart();
 	}
 
 	private boolean generateAndDrawClusters() {

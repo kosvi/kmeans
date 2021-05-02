@@ -21,6 +21,17 @@ public class Clusters {
 		return clusters;
 	}
 
+	public double getSumOfDistances() {
+		if (clusters == null) {
+			return -1;
+		}
+		double sum = 0;
+		for (Cluster c : clusters) {
+			sum += c.getSumOfDistances();
+		}
+		return sum;
+	}
+
 	public String getClusterSizes() {
 		StringBuilder sb = new StringBuilder();
 		for (Cluster c : clusters) {

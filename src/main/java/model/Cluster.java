@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.Distances;
+
 public class Cluster implements Comparable<Cluster> {
 
 	private List<XY> data;
@@ -62,6 +64,17 @@ public class Cluster implements Comparable<Cluster> {
 
 	public String getName() {
 		return name;
+	}
+
+	public double getSumOfDistances() {
+		if (center == null || data == null) {
+			return -1;
+		}
+		double sum = 0;
+		for (XY xy : data) {
+			sum += Distances.calculateDistance(xy, center);
+		}
+		return sum;
 	}
 
 	/*

@@ -58,6 +58,7 @@ public class ClusterFactory {
 		}
 		System.out.println("Cluster sizes: ");
 		System.out.println(this.clusters.getClusterSizes());
+		System.out.println("Sum of all distances to nearest center: " + this.clusters.getSumOfDistances());
 	}
 
 	private void moveCenters() {
