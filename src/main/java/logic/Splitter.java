@@ -18,6 +18,7 @@ public class Splitter {
 
 	private List<XY> data;
 	private Queue<Edge> edges;
+	private HashMap<XY, List<Edge>> graph;
 	private HashMap<XY, XY> parents;
 	private List<XY> cluster1;
 	private List<XY> cluster2;
@@ -30,42 +31,54 @@ public class Splitter {
 		this.edges = new PriorityQueue<>();
 		this.parents = new HashMap<>();
 		for (XY xy : data) {
-			this.data.add(xy);
-			this.parents.put(xy, xy);
+			XY xy2 = new XY(xy.getX(), xy.getY());
+			this.data.add(xy2);
+			this.parents.put(xy2, xy2);
 			/*
 			 * We want to create all edges in the graph and calculate weight for them
 			 */
-			for (XY xy2 : data) {
-				if (xy.equals(xy2)) {
+			for (XY i : data) {
+				if (xy2.equals(i)) {
 					continue;
 				}
-				Edge edge = new Edge(xy, xy2);
-				edge.setWeight(Distances.calculateDistance(xy, xy2));
+				Edge edge = new Edge(xy2, i);
+				edge.setWeight(Distances.calculateDistance(xy2, i));
 				this.edges.add(edge);
 			}
 		}
-		this.findCenters();
+		this.generateGraph();
 		this.createClusters();
 	}
 
-	private void findCenters() {
+	private void generateGraph() {
 		int edgesNeeded = this.data.size() - 2;
-		Edge longest = this.edges.poll();
+		this.graph = new HashMap<>();
 		while (edgesNeeded > 0) {
 			Edge shortest = this.edges.poll();
 			if (findSet(shortest.getA()).equals(findSet(shortest.getB()))) {
 				// these ends of the edge are already in the same set
 				continue;
 			}
+			this.addEdgeToGraph(shortest);
 			union(shortest.getA(), shortest.getB());
-			longest = shortest;
 			edgesNeeded--;
 		}
-		this.center1 = longest.getA();
-		this.center2 = longest.getB();
 	}
 
-	private void createClusters() {
+	private void addEdgeToGraph(Edge edge) {
+		XY a = edge.getA();
+//		XY b = edge.getB();
+		if (!this.graph.containsKey(a)) {
+			this.graph.put(a, new ArrayList<Edge>());
+		}
+		this.graph.get(a).add(edge);
+//		if (!this.graph.containsKey(b)) {
+//			this.graph.put(b, new ArrayList<Edge>());
+//		}
+//		this.graph.get(b).add(edge);
+	}
+
+	private void createClusters2() {
 		this.cluster1 = new ArrayList<>();
 		this.cluster2 = new ArrayList<>();
 		for (XY xy : this.data) {
@@ -79,6 +92,48 @@ public class Splitter {
 			} else {
 				this.cluster2.add(xy);
 			}
+		}
+	}
+
+	private void createClusters() {
+		this.cluster1 = new ArrayList<>();
+		this.cluster2 = new ArrayList<>();
+		HashSet<XY> visited = new HashSet<>();
+		int cluster = 1;
+		XY cluster1Set = this.findSet(this.data.get(0));
+		// We can assume there is no cycles in the graph and it contains two separate
+		// components
+		for (int i = 0; i < this.data.size(); i++) {
+			if (visited.contains(this.data.get(i))) {
+				continue;
+			}
+			if (this.findSet(this.data.get(i)).equals(cluster1Set)) {
+				this.depthFirstSearch(visited, 1, this.data.get(i));
+			} else {
+				this.depthFirstSearch(visited, 2, this.data.get(i));
+			}
+		}
+		this.center1 = Distances.guessCenter(cluster1);
+		this.center2 = Distances.guessCenter(cluster2);
+		System.out.println("Cluster 1 size: " + this.cluster1.size());
+		System.out.println("Cluster 2 size: " + this.cluster2.size());
+	}
+
+	private void depthFirstSearch(HashSet<XY> visited, int cluster, XY xy) {
+		if (visited.contains(xy)) {
+			return;
+		}
+		visited.add(xy);
+		if (cluster == 1) {
+			this.cluster1.add(xy);
+		} else {
+			this.cluster2.add(xy);
+		}
+		if (this.graph.get(xy) == null) {
+			return;
+		}
+		for (Edge edge : this.graph.get(xy)) {
+			this.depthFirstSearch(visited, cluster, edge.getB());
 		}
 	}
 

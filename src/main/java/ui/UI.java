@@ -28,6 +28,7 @@ public class UI {
 	private Clusters clusters;
 	private List<XY> data;
 	private int n, k, m;
+	private boolean gaussian;
 
 	public UI(Scanner s, Clusters c) {
 		this.sc = new ScatterChart();
@@ -36,6 +37,7 @@ public class UI {
 		this.data = null;
 		this.n = 0;
 		this.k = 0;
+		this.gaussian = false;
 	}
 
 	public UI(Scanner s, Clusters c, int n, int k, int m) {
@@ -142,7 +144,11 @@ public class UI {
 			return false;
 		}
 		DataGenerator dg = new DataGenerator();
-		this.data = dg.generateXYList(n, m);
+		if (this.gaussian) {
+			this.data = dg.generateXYClusters(n, m, k);
+		} else {
+			this.data = dg.generateXYList(n, m);
+		}
 		return true;
 	}
 
@@ -173,6 +179,13 @@ public class UI {
 				System.err.println(e.getMessage());
 				continue;
 			}
+			System.out.print("set gaussian (0=false, 1=true) : ");
+			int g = -1;
+			try {
+				g = Integer.parseInt(scanner.nextLine());
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
 			if (n < Constants.MIN_N || k < Constants.MIN_K || m < Constants.MIN_M) {
 				continue;
 			}
@@ -180,6 +193,13 @@ public class UI {
 				continue;
 			}
 			this.initialize();
+			if (g < 0) {
+				continue;
+			} else if (g == 0) {
+				this.gaussian = false;
+			} else {
+				this.gaussian = true;
+			}
 			this.n = n;
 			this.k = k;
 			this.m = m;
