@@ -17,10 +17,13 @@ public class DataGenerator {
 	public List<XY> generateXYClusters(int n, int m, int k) {
 		List<XY> data = new ArrayList<>();
 		int dotsPerCluster = n / k;
-		double std = (double) m / 25.0;
+		// std = 5 % of matrix width
+		double std = (double) m * 0.05;
 		for (int i = 0; i < k; i++) {
-			int centerX = r.nextInt(m - (2 * m / 25)) + m / 25;
-			int centerY = r.nextInt(m - (2 * m / 25)) + m / 25;
+			// Randomize cluster center
+			// and make sure it is 1x std from borders
+			int centerX = r.nextInt(m - (int) (2*std)) + (int) std;
+			int centerY = r.nextInt(m - (int) (2*std)) + (int) std;
 			int numberOfData = Math.min(dotsPerCluster, n);
 			n -= dotsPerCluster;
 			for (int j = 0; j < numberOfData; j++) {

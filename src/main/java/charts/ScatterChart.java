@@ -63,7 +63,8 @@ public class ScatterChart extends JFrame {
 		JFreeChart chart = ChartFactory.createScatterPlot("", "X", "Y", dataset, PlotOrientation.VERTICAL, true, false,
 				false);
 		XYPlot plot = (XYPlot) chart.getPlot();
-		plot.setBackgroundPaint(new Color(255, 255, 255));
+		final int color = Constants.BACKGROUND_COLOR;
+		plot.setBackgroundPaint(new Color(color, color, color));
 
 		// make window same width & height for easier reading
 		ChartPanel panel = new ChartPanel(chart);
