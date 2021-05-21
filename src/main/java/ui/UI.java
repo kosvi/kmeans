@@ -2,6 +2,7 @@ package ui;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.WindowConstants;
 
@@ -58,7 +59,10 @@ public class UI {
 				continue;
 			}
 			if (s == 2) {
+				long start = System.nanoTime();
 				generateData();
+				long stop = System.nanoTime();
+				this.printTime(start, stop, "generateData()");
 				continue;
 			}
 			if (s == 3) {
@@ -66,7 +70,10 @@ public class UI {
 				continue;
 			}
 			if (s == 4) {
+				long start = System.nanoTime();
 				generateAndDrawClusters();
+				long stop = System.nanoTime();
+				this.printTime(start, stop, "generateAndDrawClusters()");
 				continue;
 			}
 			if (s == 6) {
@@ -223,4 +230,10 @@ public class UI {
 		}
 		return false;
 	}
+
+	private void printTime(long start, long stop, String method) {
+		long time = stop - start;
+		System.out.println("\n" + method + " took " + TimeUnit.NANOSECONDS.toMillis(time) + " ms to complete.\n");
+	}
+
 }
